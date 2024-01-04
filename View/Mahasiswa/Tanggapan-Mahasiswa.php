@@ -1,7 +1,3 @@
-<?php
-include "../Model/db.php";
-?>
-
 <!doctype html>
 <html lang="en">
 
@@ -9,7 +5,7 @@ include "../Model/db.php";
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pengaduan</title>
-  <link rel="stylesheet" href="../assets/css/styles.min.css" />
+  <link rel="stylesheet" href="../../assets/css/styles.min.css" />
 </head>
 
 <body>
@@ -35,7 +31,7 @@ include "../Model/db.php";
               <span class="hide-menu">Home</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Index.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Index-Mahasiswa.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -47,15 +43,7 @@ include "../Model/db.php";
               <span class="hide-menu">CONTENT</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./User.php" aria-expanded="false">
-                <span>
-                  <i class="ti ti-user"></i>
-                </span>
-                <span class="hide-menu">User</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./Pengaduan.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Pengaduan-Mahasiswa.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-alert-circle"></i>
                 </span>
@@ -63,7 +51,7 @@ include "../Model/db.php";
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Tanggapan.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Tanggapan-Mahasiswa.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-bell"></i>
                 </span>
@@ -93,7 +81,7 @@ include "../Model/db.php";
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="../assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                  <img src="../../assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
@@ -136,28 +124,18 @@ include "../Model/db.php";
                           <th>AKSI</th>
                         </tr>
                       </thead>
-                      <?php
-                      $sql = "SELECT tanggapan.*, petugas.username, pengaduan.judul
-                      FROM tanggapan
-                      LEFT JOIN petugas ON tanggapan.id_petugas = petugas.id_petugas
-                      LEFT JOIN pengaduan ON tanggapan.id_pengaduan = pengaduan.id_pengaduan
-                      ORDER BY id_tanggapan DESC";
-                      $query = sqlsrv_query($conn, $sql);
-                      $num = 1;
-                      while ($data = sqlsrv_fetch_array($query)) {
-                      ?>
-                        <tr>
-                          <td><?php echo $num++; ?></td>
-                          <td><?php echo $data['judul']; ?></td>
-                          <td><?php echo $data['username']; ?></td>
-                          <td><?php echo $data['isi_tanggapan']; ?></td>
-                          <td><?php echo $data['tanggal_tanggapan']; ?></td>
-                          <td>
-                            <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-pencil fs-6"></i></a>
-                            <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="ti ti-trash fs-6"></i></a>
-                          </td>
-                        </tr>
-                      <?php } ?>
+
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                          <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-pencil fs-6"></i></a>
+                          <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="ti ti-trash fs-6"></i></a>
+                        </td>
+                      </tr>
                     </table>
                   </div>
                 </div>
@@ -222,13 +200,13 @@ include "../Model/db.php";
       </div>
     </div>
   </div>
-  <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
-  <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/js/sidebarmenu.js"></script>
-  <script src="../assets/js/app.min.js"></script>
-  <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-  <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
-  <script src="../assets/js/dashboard.js"></script>
+  <script src="../../assets/libs/jquery/dist/jquery.min.js"></script>
+  <script src="../../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/js/sidebarmenu.js"></script>
+  <script src="../../assets/js/app.min.js"></script>
+  <script src="../../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
+  <script src="../../assets/libs/simplebar/dist/simplebar.js"></script>
+  <script src="../../assets/js/dashboard.js"></script>
 </body>
 
 </html>

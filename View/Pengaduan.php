@@ -1,3 +1,7 @@
+<?php
+include "../Model/db.php";
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -134,20 +138,30 @@
                           <th>AKSI</th>
                         </tr>
                       </thead>
-
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                          <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-pencil fs-6"></i></a>
-                          <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="ti ti-trash fs-6"></i></a>
-                        </td>
-                      </tr>
+                      <?php
+                      $sql = "SELECT pengaduan.*, mahasiswa.nama, petugas.username 
+                      FROM pengaduan 
+                      LEFT JOIN mahasiswa ON pengaduan.id_mahasiswa = mahasiswa.id_mahasiswa
+                      LEFt JOIN petugas ON pengaduan.id_petugas = petugas.id_petugas 
+                      ORDER BY id_pengaduan DESC";
+                      $query = sqlsrv_query($conn, $sql);
+                      $num = 1;
+                      while ($data = sqlsrv_fetch_array($query)) {
+                      ?>
+                        <tr>
+                          <td><?php echo $num++; ?></td>
+                          <td><?php echo $data['nama']; ?></td>
+                          <td><?php echo $data['judul']; ?></td>
+                          <td><?php echo $data['isi_pengaduan']; ?></td>
+                          <td><?php echo $data['tanggal_pengaduan']; ?></td>
+                          <td><?php echo $data['status_pengaduan']; ?></td>
+                          <td><?php echo $data['username']; ?></td>
+                          <td>
+                            <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-pencil fs-6"></i></a>
+                            <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="ti ti-trash fs-6"></i></a>
+                          </td>
+                        </tr>
+                      <?php } ?>
                     </table>
                   </div>
                 </div>

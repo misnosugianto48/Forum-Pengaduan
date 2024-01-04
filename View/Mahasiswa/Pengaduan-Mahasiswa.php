@@ -1,5 +1,5 @@
 <?php
-include "../Model/db.php";
+include "../../Model/db.php";
 ?>
 
 <!doctype html>
@@ -9,7 +9,7 @@ include "../Model/db.php";
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pengaduan</title>
-  <link rel="stylesheet" href="../assets/css/styles.min.css" />
+  <link rel="stylesheet" href="../../assets/css/styles.min.css" />
 </head>
 
 <body>
@@ -35,7 +35,7 @@ include "../Model/db.php";
               <span class="hide-menu">Home</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Index.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Index-Mahasiswa.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -47,15 +47,7 @@ include "../Model/db.php";
               <span class="hide-menu">CONTENT</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./User.php" aria-expanded="false">
-                <span>
-                  <i class="ti ti-user"></i>
-                </span>
-                <span class="hide-menu">User</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./Pengaduan.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Pengaduan-Mahasiswa.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-alert-circle"></i>
                 </span>
@@ -63,7 +55,7 @@ include "../Model/db.php";
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Tanggapan.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Tanggapan-Mahasiswa.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-bell"></i>
                 </span>
@@ -93,7 +85,7 @@ include "../Model/db.php";
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="../assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                  <img src="../../assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
@@ -130,18 +122,14 @@ include "../Model/db.php";
                         <tr>
                           <th>NO</th>
                           <th>JUDUL</th>
-                          <th>PETUGAS</th>
                           <th>ISI</th>
-                          <th>DITANGGAPI</th>
+                          <th>DIBUAT</th>
+                          <th>STATUS</th>
                           <th>AKSI</th>
                         </tr>
                       </thead>
                       <?php
-                      $sql = "SELECT tanggapan.*, petugas.username, pengaduan.judul
-                      FROM tanggapan
-                      LEFT JOIN petugas ON tanggapan.id_petugas = petugas.id_petugas
-                      LEFT JOIN pengaduan ON tanggapan.id_pengaduan = pengaduan.id_pengaduan
-                      ORDER BY id_tanggapan DESC";
+                      $sql = "SELECT * FROM pengaduan ORDER BY id_pengaduan DESC";
                       $query = sqlsrv_query($conn, $sql);
                       $num = 1;
                       while ($data = sqlsrv_fetch_array($query)) {
@@ -149,9 +137,9 @@ include "../Model/db.php";
                         <tr>
                           <td><?php echo $num++; ?></td>
                           <td><?php echo $data['judul']; ?></td>
-                          <td><?php echo $data['username']; ?></td>
-                          <td><?php echo $data['isi_tanggapan']; ?></td>
-                          <td><?php echo $data['tanggal_tanggapan']; ?></td>
+                          <td><?php echo $data['isi_pengaduan']; ?></td>
+                          <td><?php echo $data['tanggal_pengaduan']; ?></td>
+                          <td><?php echo $data['status_pengaduan']; ?></td>
                           <td>
                             <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-pencil fs-6"></i></a>
                             <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="ti ti-trash fs-6"></i></a>
@@ -174,43 +162,23 @@ include "../Model/db.php";
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Tambah User</h1>
+          <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Tambah Pengaduan</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="card-body">
             <form action="controller/userController.php" method="post">
               <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" aria-describedby="username" name="username">
+                <label for="judul" class="form-label">Judul</label>
+                <input class="form-control" type="text" name="judul" id="judul" value="">
               </div>
               <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password">
+                <label for="isi" class="form-label">Isi</label>
+                <textarea class="form-control" name="isi" id="isi" cols="30" rows="10"></textarea>
               </div>
               <div class="mb-3">
-                <label for="nama" class="form-label">Nama</label>
-                <input type="text" class="form-control" id="nama" name="nama">
-              </div>
-              <div class="mb-3">
-                <label for="jenisKelamin" class="form-label">Jenis kelamin</label>
-                <Select id="jenisKelamin" class="form-select" name="jenisKelamin">
-                  <option value="" selected>Pilih</option>
-                  <option value="Laki-Laki">Laki-Laki</option>
-                  <option value="Perempuan">Perempuan</option>
-                </Select>
-              </div>
-              <div class="mb-3">
-                <label for="notelepon" class="form-label">No Telepon</label>
-                <input type="text" class="form-control" id="notelepon" name="notelepon">
-              </div>
-              <div class="mb-3">
-                <label for="level" class="form-label">Level</label>
-                <Select id="level" class="form-select" name="level">
-                  <option value="" selected>Pilih</option>
-                  <option value="Admin">Admin</option>
-                  <option value="Member">Member</option>
-                </Select>
+                <label for="tgl_pengaduan" class="form-label">Tanggal Pengaduan</label>
+                <input type="date" class="form-control" id="tgl_pengaduan" name="tgl_pengaduan">
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger m1" data-bs-dismiss="modal">Keluar</button>
@@ -222,13 +190,13 @@ include "../Model/db.php";
       </div>
     </div>
   </div>
-  <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
-  <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/js/sidebarmenu.js"></script>
-  <script src="../assets/js/app.min.js"></script>
-  <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-  <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
-  <script src="../assets/js/dashboard.js"></script>
+  <script src="../../assets/libs/jquery/dist/jquery.min.js"></script>
+  <script src="../../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/js/sidebarmenu.js"></script>
+  <script src="../../assets/js/app.min.js"></script>
+  <script src="../../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
+  <script src="../../assets/libs/simplebar/dist/simplebar.js"></script>
+  <script src="../../assets/js/dashboard.js"></script>
 </body>
 
 </html>

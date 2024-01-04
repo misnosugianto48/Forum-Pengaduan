@@ -1,12 +1,26 @@
 <?php
 session_start();
 
-function checkLogin($username, $password)
+function checkLogin($conn, $username, $password, $userType)
 {
-  include "db.php";
+  $tableName = '';
 
-  $sql = "SELECT * FROM tb_user WHERE username = '$username' AND pwd = '$pwd'";
-  $params = array($username, $pwd);
+  switch ($userType) {
+    case 'Admin':
+      $tableName = 'admin';
+      break;
+    case 'Petugas':
+      $tableName = 'petugas';
+      break;
+    case 'Mahasiswa':
+      $tableName = 'mahasiswa';
+      break;
+    default:
+      return false;
+  }
+
+  $sql = "SELECT * FROM $tableName WHERE username = ? AND pwd = ?";
+  $params = array($username, $password);
   $stmt = sqlsrv_query($conn, $sql, $params);
 
   if ($stmt === false) {
@@ -16,9 +30,9 @@ function checkLogin($username, $password)
   $row = sqlsrv_fetch_array($stmt);
 
   if ($row) {
-    $_SESSION['id_user'] = $row['id_user'];
+    $_SESSION['id_user'] = $row["id_$userType"];
     $_SESSION['username'] = $row['username'];
-    $_SESSION['lvl'] = $row['lvl'];
+    $_SESSION['level_user'] = $row['level_user'];
 
     return true;
   } else {
@@ -28,25 +42,37 @@ function checkLogin($username, $password)
 
 // Proses login
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  include "./Model/db.php";
   $username = $_POST['username'];
   $pwd = $_POST['password'];
+  $userType = $_POST['userType'];
 
-  if (checkLogin($username, $pwd)) {
-    // Redirect ke halaman admin jika login sukses
-    if ($_SESSION['lvl'] == 'Admin') {
-      header("Location: index.php");
-      exit();
+  if (checkLogin($conn, $username, $pwd, $userType)) {
+    // Redirect ke halaman sesuai level jika login sukses
+    if ($_SESSION['level_user'] == 'Admin') {
+      header("Location: ./View/Index.php");
+    } elseif ($_SESSION['level_user'] == 'Petugas') {
+      header("Location: petugas_dashboard.php");
+    } elseif ($_SESSION['level_user'] == 'Mahasiswa') {
+      header("Location: ./View/Mahasiswa/Index-Mahasiswa.php");
     } else {
-      header("Location: login.php");
-      exit();
+      // Level tidak valid, sesuaikan dengan kebutuhan Anda
+      echo "<script>
+                alert('Level tidak valid');
+                window.location = 'Login.php';
+                </script>";
     }
+    exit();
   } else {
     echo "<script>
-    alert('Periksa username dan passwordmu');
-    </script>";
+        alert('Periksa username, password, dan jenis pengguna');
+        window.location = 'Login.php';
+        </script>";
   }
 }
 ?>
+
+
 
 
 <!doctype html>
@@ -76,12 +102,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="username" class="form-label">Username</label>
                     <input type="text" class="form-control" id="username" aria-describedby="emailHelp" name="username" required>
                   </div>
-                  <div class="mb-4">
+                  <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" name="password" required>
                   </div>
+                  <div class="mb-3">
+                    <label for="userType" class="form-label">User Type</label>
+                    <select class="form-select" id="userType" name="userType" required>
+                      <option value="Admin">Admin</option>
+                      <option value="Petugas">Petugas</option>
+                      <option value="Mahasiswa">Mahasiswa</option>
+                    </select>
+                  </div>
                   <input value="Sign in" type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" name="login">
                 </form>
+
                 <div class="d-flex align-items-center justify-content-center">
                   <p class="fs-4 mb-0 fw-bold">New to User?</p>
                   <a class="text-primary fw-bold ms-2" href="./Register.php">Create an account</a>

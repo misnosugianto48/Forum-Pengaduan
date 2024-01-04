@@ -10,6 +10,4 @@ $conn = sqlsrv_connect($serverName, $connectionOptions);
 if (!$conn) {
   echo "<script>alert('Failed Connected')</script>;";
   die(print_r(sqlsrv_errors(), true));
-} {
-  echo "Koneksi Berhasil";
 }

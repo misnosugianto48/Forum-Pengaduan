@@ -1,3 +1,5 @@
+CREATE DATABASE pengaduan_db;
+
 USE pengaduandb;
 
 CREATE TABLE mahasiswa (
@@ -5,15 +7,16 @@ CREATE TABLE mahasiswa (
     nama VARCHAR(50) NOT NULL,
     nim VARCHAR(10) NOT NULL,
     email VARCHAR(20) NOT NULL,
-    password VARCHAR(10) NOT NULL,
+    pwd VARCHAR(10) NOT NULL,
     PRIMARY KEY(id_mahasiswa)
 );
 
 CREATE TABLE petugas (
     id_petugas INT IDENTITY(1,1) NOT NULL,
     nip VARCHAR(10) NOT NULL,
-    nama VARCHAR(50) NOT NULL,
-    password VARCHAR(10) NOT NULL,
+    username VARCHAR(50) NOT NULL,
+    pwd VARCHAR(10) NOT NULL,
+    level_user VARCHAR(10) NOT NULL,
     PRIMARY KEY(id_petugas)
 );
 
@@ -47,13 +50,19 @@ CREATE TABLE tanggapan (
 CREATE TABLE admin (
     id_admin INT IDENTITY(1,1) NOT NULL,
     username VARCHAR(10) NOT NULL,
-    password VARCHAR(10) NOT NULL,
+    pwd VARCHAR(10) NOT NULL,
+    level_user VARCHAR(10) NOT NULL,
     PRIMARY KEY(id_admin)
 );
 
 INSERT INTO admin values(
     'Admin',
-    'Admin123'
+    'Admin123',
+    'Admin'
 );
+
+SELECT * FROM petugas;
+SELECT * FROM pengaduan;
+SELECT * FROM tanggapan;
 
 SELECT * FROM admin;

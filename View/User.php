@@ -50,7 +50,7 @@ include "../Model/db.php";
                 <span>
                   <i class="ti ti-user"></i>
                 </span>
-                <span class="hide-menu">Petugas</span>
+                <span class="hide-menu">User</span>
               </a>
             </li>
             <li class="sidebar-item">
@@ -100,7 +100,7 @@ include "../Model/db.php";
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3"></p>
                     </a>
-                    <a href="../Controller/AuthController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
+                    <a href="controller/authController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -128,23 +128,100 @@ include "../Model/db.php";
                       <thead>
                         <tr>
                           <th>NO</th>
-                          <th>ID</th>
                           <th>NIP</th>
-                          <th>NAMA</th>
+                          <th>USERNAME</th>
+                          <th>LEVEL</th>
                           <th>AKSI</th>
                         </tr>
                       </thead>
+                      <?php
+                      $sql = "SELECT * FROM petugas order by id_petugas DESC";
+                      $query = sqlsrv_query($conn, $sql);
+                      $num = 1;
+                      while ($data = sqlsrv_fetch_array($query)) {
+                      ?>
 
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                          <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-pencil fs-6"></i></a>
-                          <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="ti ti-trash fs-6"></i></a>
-                        </td>
-                      </tr>
+                        <tr>
+                          <td><?php echo $num++; ?></td>
+                          <td><?php echo $data['nip']; ?></td>
+                          <td><?php echo $data['username']; ?></td>
+                          <td><?php echo $data['level_user']; ?></td>
+                          <td>
+                            <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate<?php echo $num ?>"><i class="ti ti-pencil fs-6"></i></a>
+                            <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete<?php echo $num ?>"><i class="ti ti-trash fs-6"></i></a>
+                          </td>
+                        </tr>
+
+                        <!-- Modal hapus -->
+                        <div class="modal fade" id="modalDelete<?php echo $num ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Konfirmasi Hapus User</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="card-body">
+                                  <form action="../Controller/UserController.php" method="post">
+                                    <input type="text" value="<?php echo $data['id_petugas']; ?>" name="id_petugas" hidden>
+                                    <div class="mb-3">
+                                      <h5 class="text-center text-danger">Yakin menghapus user <?php echo $data['nip'] ?> - <?php echo $data['username'] ?></h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="nutton" class="btn btn-danger m1">Batal</button>
+                                      <button type="submit" class="btn btn-secondary m1" name="bdelete">Hapus User</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- end modal hapus -->
+
+                        <!-- modal ubah -->
+                        <div class="modal fade modal-lg" id="modalUpdate<?php echo $num ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Ubah User</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="card-body">
+                                  <form action="../Controller/UserController.php" method="post">
+                                    <input type="hidden" name="id_petugas" id="id_petugas" value="<?php echo $data['id_petugas']; ?>">
+                                    <div class="mb-3">
+                                      <label for="nip" class="form-label">NIP</label>
+                                      <input type="text" class="form-control" id="nip" aria-describedby="nip" name="nip" value="<?php echo $data['nip']; ?>">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="username" class="form-label">Username</label>
+                                      <input type="username" class="form-control" id="username" name="username" value="<?php echo $data['username']; ?>">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="password" class="form-label">Password</label>
+                                      <input type="text" class="form-control" id="password" name="password" value="<?php echo $data['pwd']; ?>">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="level" class="form-label">Level</label>
+                                      <Select id="level" class="form-select" name="level">
+                                        <option value="<?php echo $data['level_user']; ?>" selected><?php echo $data['level_user']; ?></option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Petugas">Petugas</option>
+                                      </Select>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-danger m1" data-bs-dismiss="modal">Keluar</button>
+                                      <button type="submit" class="btn btn-success m1" name="bupdate">Simpan</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      <?php } ?>
                     </table>
                   </div>
                 </div>
@@ -161,7 +238,7 @@ include "../Model/db.php";
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Tambah Petugas</h1>
+          <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Tambah User</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -172,12 +249,20 @@ include "../Model/db.php";
                 <input type="text" class="form-control" id="nip" aria-describedby="nip" name="nip">
               </div>
               <div class="mb-3">
-                <label for="nama" class="form-label">Nama</label>
-                <input type="text" class="form-control" id="nama" name="nama">
+                <label for="username" class="form-label">Username</label>
+                <input type="username" class="form-control" id="username" name="username">
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password">
+              </div>
+              <div class="mb-3">
+                <label for="level" class="form-label">Level</label>
+                <Select id="level" class="form-select" name="level">
+                  <option value="" selected>Pilih</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Petugas">Petugas</option>
+                </Select>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger m1" data-bs-dismiss="modal">Keluar</button>

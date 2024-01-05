@@ -1,7 +1,13 @@
 <?php
+session_start();
 include "../Model/db.php";
-?>
+if (!isset($_SESSION['username'])) {
+  header("location: ../../Login.php");
+  exit();
+}
+$id_admin_login = $_SESSION['id_admin']; // Sesuaikan dengan variabel sesi yang Anda gunakan
 
+?>
 <!doctype html>
 <html lang="en">
 
@@ -99,7 +105,7 @@ include "../Model/db.php";
                   <div class="message-body">
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3"></p>
+                      <p class="mb-0 fs-3"><?php echo $_SESSION['username'] ?> - ID <?php echo $id_admin_login; ?></p>
                     </a>
                     <a href="controller/authController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
                   </div>
@@ -121,19 +127,14 @@ include "../Model/db.php";
                   <div class="card-header">
                   </div>
                   <div class="card-body">
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-outline-primary m-1 mb-2" data-bs-toggle="modal" data-bs-target="#modalAdd">
-                      <i class="ti ti-plus fs-6"></i>
-                    </button>
                     <table class="table table-bordered table-striped table-hover">
                       <thead>
                         <tr>
                           <th>NO</th>
                           <th>JUDUL</th>
                           <th>PETUGAS</th>
-                          <th>ISI</th>
                           <th>DITANGGAPI</th>
-                          <th>AKSI</th>
+                          <th>ISI</th>
                         </tr>
                       </thead>
                       <?php
@@ -150,73 +151,41 @@ include "../Model/db.php";
                           <td><?php echo $num++; ?></td>
                           <td><?php echo $data['judul']; ?></td>
                           <td><?php echo $data['username']; ?></td>
-                          <td><?php echo $data['isi_tanggapan']; ?></td>
                           <td><?php echo $data['tanggal_tanggapan']; ?></td>
                           <td>
-                            <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-pencil fs-6"></i></a>
-                            <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="ti ti-trash fs-6"></i></a>
+                            <a href="#" class="btn btn-outline-success m-1" data-bs-toggle="modal" data-bs-target="#modalView<?php echo $num; ?>"><i class="ti ti-eye fs-4"></i></a>
                           </td>
                         </tr>
+
+                        <!-- modal view -->
+                        <div class="modal fade modal-lg" id="modalView<?php echo $data['id_tanggapan'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Lihat tanggapan</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="card-body">
+                                  <form>
+                                    <div class="mb-3">
+                                      <textarea name="isi_pengaduan" id="isi_pengaduan" cols="30" rows="10" class="form-control" readonly><?php echo $data['isi_tanggapan'] ?></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-danger m1" data-bs-dismiss="modal">Keluar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       <?php } ?>
                     </table>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Add-->
-  <div class="modal fade modal-lg" id="modalAdd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Tambah User</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="card-body">
-            <form action="controller/userController.php" method="post">
-              <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" aria-describedby="username" name="username">
-              </div>
-              <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password">
-              </div>
-              <div class="mb-3">
-                <label for="nama" class="form-label">Nama</label>
-                <input type="text" class="form-control" id="nama" name="nama">
-              </div>
-              <div class="mb-3">
-                <label for="jenisKelamin" class="form-label">Jenis kelamin</label>
-                <Select id="jenisKelamin" class="form-select" name="jenisKelamin">
-                  <option value="" selected>Pilih</option>
-                  <option value="Laki-Laki">Laki-Laki</option>
-                  <option value="Perempuan">Perempuan</option>
-                </Select>
-              </div>
-              <div class="mb-3">
-                <label for="notelepon" class="form-label">No Telepon</label>
-                <input type="text" class="form-control" id="notelepon" name="notelepon">
-              </div>
-              <div class="mb-3">
-                <label for="level" class="form-label">Level</label>
-                <Select id="level" class="form-select" name="level">
-                  <option value="" selected>Pilih</option>
-                  <option value="Admin">Admin</option>
-                  <option value="Member">Member</option>
-                </Select>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-danger m1" data-bs-dismiss="modal">Keluar</button>
-                <button type="submit" class="btn btn-success m1" name="bsimpan">Simpan</button>
-              </div>
-            </form>
           </div>
         </div>
       </div>

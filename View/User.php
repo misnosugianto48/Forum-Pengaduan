@@ -1,5 +1,12 @@
 <?php
+session_start();
 include "../Model/db.php";
+if (!isset($_SESSION['username'])) {
+  header("location: ../../Login.php");
+  exit();
+}
+$id_admin_login = $_SESSION['id_admin']; // Sesuaikan dengan variabel sesi yang Anda gunakan
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -98,7 +105,7 @@ include "../Model/db.php";
                   <div class="message-body">
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3"></p>
+                      <p class="mb-0 fs-3"><?php echo $_SESSION['username'] ?> - ID <?php echo $id_admin_login; ?></p>
                     </a>
                     <a href="../Controller/LogoutController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
                   </div>

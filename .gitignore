@@ -2,3 +2,7 @@ html
 assets/images/logos
 assets/images/products
 assets/images/backgrounds
+composer.json
+composer.lock
+doc182-html-id
+vendor

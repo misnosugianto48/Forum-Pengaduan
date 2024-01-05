@@ -5,7 +5,7 @@ if (!isset($_SESSION['username'])) {
   header("location: ../../Login.php");
   exit();
 }
-$id_admin = $_SESSION['id_admin']; // Sesuaikan dengan variabel sesi yang Anda gunakan
+$id_admin_login = $_SESSION['id_admin']; // Sesuaikan dengan variabel sesi yang Anda gunakan
 
 ?>
 
@@ -106,7 +106,7 @@ $id_admin = $_SESSION['id_admin']; // Sesuaikan dengan variabel sesi yang Anda g
                   <div class="message-body">
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3"><?php print_r($_SESSION['username']); ?></p>
+                      <p class="mb-0 fs-3"><?php echo $_SESSION['username']; ?> - ID <?php echo $id_admin_login; ?></p>
                     </a>
                     <a href="../Controller/LogoutController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
                   </div>
@@ -129,6 +129,7 @@ $id_admin = $_SESSION['id_admin']; // Sesuaikan dengan variabel sesi yang Anda g
                   </div>
                   <div class="card-body">
                     <table class="table table-bordered table-striped table-hover">
+                      <a href="./Laporan.php" class="btn btn-outline-secondary m-1"><i class="ti ti-printer fs-6"></i></a>
                       <thead>
                         <tr>
                           <th>NO</th>
@@ -138,15 +139,14 @@ $id_admin = $_SESSION['id_admin']; // Sesuaikan dengan variabel sesi yang Anda g
                           <th>DIBUAT</th>
                           <th>STATUS</th>
                           <th>PETUGAS</th>
-                          <th>AKSI</th>
                         </tr>
                       </thead>
                       <?php
                       $sql = "SELECT pengaduan.*, mahasiswa.nama, petugas.username 
                       FROM pengaduan 
                       LEFT JOIN mahasiswa ON pengaduan.id_mahasiswa = mahasiswa.id_mahasiswa
-                      LEFt JOIN petugas ON pengaduan.id_petugas = petugas.id_petugas 
-                      ORDER BY id_pengaduan DESC";
+                      LEFT JOIN petugas ON pengaduan.id_petugas = petugas.id_petugas 
+                      ORDER BY id_pengaduan, status_pengaduan DESC";
                       $query = sqlsrv_query($conn, $sql);
                       $num = 1;
                       while ($data = sqlsrv_fetch_array($query)) {
@@ -157,12 +157,10 @@ $id_admin = $_SESSION['id_admin']; // Sesuaikan dengan variabel sesi yang Anda g
                           <td><?php echo $data['judul']; ?></td>
                           <td><?php echo $data['isi_pengaduan']; ?></td>
                           <td><?php echo $data['tanggal_pengaduan']; ?></td>
-                          <td><?php echo $data['status_pengaduan']; ?></td>
-                          <td><?php echo $data['username']; ?></td>
-                          <td>
-                            <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-pencil fs-6"></i></a>
-                            <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="ti ti-trash fs-6"></i></a>
+                          <td <?php echo $data['status_pengaduan'] === 'On Progress' ? 'class="text-warning"' : 'class="text-success"'; ?>>
+                            <?php echo $data['status_pengaduan']; ?>
                           </td>
+                          <td><?php echo $data['username']; ?></td>
                         </tr>
                       <?php } ?>
                     </table>

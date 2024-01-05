@@ -165,7 +165,7 @@ $id_mahasiswa_login = $_SESSION['id_mahasiswa']; // Sesuaikan dengan variabel se
                                   <form>
                                     <input type="hidden" name="id_tanggapan" id="id_tanggapan" value="<?php echo $data['id_tanggapan']; ?>">
                                     <div class="mb-3">
-                                      <textarea name="isi_pengaduan" id="isi_pengaduan" cols="30" rows="10" class="form-control"><?php echo $data['isi_tanggapan'] ?></textarea>
+                                      <textarea name="isi_pengaduan" id="isi_pengaduan" cols="30" rows="10" class="form-control" readonly><?php echo $data['isi_tanggapan'] ?></textarea>
                                     </div>
                                     <div class="modal-footer">
                                       <button type="button" class="btn btn-danger m1" data-bs-dismiss="modal">Keluar</button>

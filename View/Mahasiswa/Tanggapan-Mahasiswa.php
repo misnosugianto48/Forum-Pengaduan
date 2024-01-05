@@ -5,7 +5,7 @@ if (!isset($_SESSION['username'])) {
   header("location: ../../Login.php");
   exit();
 }
-$id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi yang Anda gunakan
+$id_mahasiswa_login = $_SESSION['id_mahasiswa']; // Sesuaikan dengan variabel sesi yang Anda gunakan
 
 ?>
 
@@ -135,7 +135,13 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                           <th>AKSI</th>
                         </tr>
                       </thead>
-
+                      <?php
+                      $sql = "SELECT tanggapan.*, pengaduan.judul
+                      FROM tanggapan
+                      JOIN pengaduan ON tanggapan.id_pengaduan = pengaduan.id_pengaduan
+                      WHERE pengaduan.id_mahasiswa = ?;
+                      ";
+                      ?>
                       <tr>
                         <td></td>
                         <td></td>

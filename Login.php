@@ -39,6 +39,8 @@ function checkLogin($conn, $username, $password, $userType)
       $_SESSION['id_mahasiswa'] = $row['id_mahasiswa'];
     } elseif ($userType == 'Petugas') {
       $_SESSION['id_petugas'] = $row['id_petugas'];
+    } elseif ($userType == 'Admin') {
+      $_SESSION['id_admin'] = $row['id_admin'];
     }
 
     return true;

@@ -100,7 +100,7 @@ include "../Model/db.php";
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3"></p>
                     </a>
-                    <a href="controller/authController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
+                    <a href="../Controller/LogoutController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>

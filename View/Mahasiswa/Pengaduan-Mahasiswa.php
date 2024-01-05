@@ -5,7 +5,7 @@ if (!isset($_SESSION['username'])) {
   header("location: ../../Login.php");
   exit();
 }
-$id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi yang Anda gunakan
+$id_mahasiswa_login = $_SESSION['id_mahasiswa']; // Sesuaikan dengan variabel sesi yang Anda gunakan
 
 ?>
 
@@ -67,6 +67,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                   <i class="ti ti-bell"></i>
                 </span>
                 <span class="hide-menu">Tanggapan</span>
+
               </a>
             </li>
           </ul>
@@ -98,9 +99,9 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                   <div class="message-body">
                     <a href="./Profile.php" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3"><?php print_r($_SESSION['username']); ?></p>
+                      <p class="mb-0 fs-3"><?php print_r($_SESSION['username']); ?> - ID <?php print_r($_SESSION['id_mahasiswa']); ?></p>
                     </a>
-                    <a href="controller/authController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
+                    <a href="../../Controller/LogoutController.php" class=" btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -155,7 +156,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                           <td><?php echo $data['tanggal_pengaduan']; ?></td>
                           <td><?php echo $data['status_pengaduan']; ?></td>
                           <td>
-                            <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-pencil fs-6"></i></a>
+                            <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate<?php echo $num; ?>"><i class="ti ti-pencil fs-6"></i></a>
                             <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="ti ti-trash fs-6"></i></a>
                           </td>
                         </tr>
@@ -187,12 +188,12 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                 <input class="form-control" type="text" name="judul" id="judul" value="">
               </div>
               <div class="mb-3">
-                <label for="isi" class="form-label">Isi</label>
-                <textarea class="form-control" name="isi" id="isi" cols="30" rows="10"></textarea>
+                <label for="isi_pengaduan" class="form-label">Isi</label>
+                <textarea class="form-control" name="isi_pengaduan" id="isi_pengaduan" cols="30" rows="10"></textarea>
               </div>
               <div class="mb-3">
                 <label for="tgl_pengaduan" class="form-label">Tanggal Pengaduan</label>
-                <input type="date" class="form-control" id="tgl_pengaduan" name="tgl_pengaduan">
+                <input type="date" class="form-control" id="tgl_pengaduan" name="tgl_pengaduan" required>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger m1" data-bs-dismiss="modal">Keluar</button>

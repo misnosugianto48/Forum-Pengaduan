@@ -100,7 +100,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3"><?php print_r($_SESSION['username']); ?></p>
                     </a>
-                    <a href="controller/authController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
+                    <a href="../../Controller/LogoutController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>

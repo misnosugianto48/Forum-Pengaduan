@@ -5,7 +5,7 @@ if (!isset($_SESSION['username'])) {
   header("location: ../../Login.php");
   exit();
 }
-$id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi yang Anda gunakan
+$id_mahasiswa_login = $_SESSION['id_mahasiswa']; // Sesuaikan dengan variabel sesi yang Anda gunakan
 
 ?>
 
@@ -67,6 +67,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                   <i class="ti ti-bell"></i>
                 </span>
                 <span class="hide-menu">Tanggapan</span>
+
               </a>
             </li>
           </ul>
@@ -98,9 +99,9 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                   <div class="message-body">
                     <a href="./Profile.php" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3"><?php print_r($_SESSION['username']); ?></p>
+                      <p class="mb-0 fs-3"><?php print_r($_SESSION['username']); ?> - ID <?php print_r($_SESSION['id_mahasiswa']); ?></p>
                     </a>
-                    <a href="controller/authController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
+                    <a href="../../Controller/LogoutController.php" class=" btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -155,10 +156,71 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                           <td><?php echo $data['tanggal_pengaduan']; ?></td>
                           <td><?php echo $data['status_pengaduan']; ?></td>
                           <td>
-                            <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-pencil fs-6"></i></a>
-                            <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="ti ti-trash fs-6"></i></a>
+                            <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate<?php echo $num; ?>"><i class="ti ti-pencil fs-6"></i></a>
+                            <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete<?php echo $num ?>"><i class="ti ti-trash fs-6"></i></a>
                           </td>
                         </tr>
+
+                        <!-- Modal hapus -->
+                        <div class="modal fade" id="modalDelete<?php echo $num ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Konfirmasi Hapus Data</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="card-body">
+                                  <form action="../../Controller/Mahasiswa/PMahasiswaController.php" method="post">
+                                    <input type="text" value="<?php echo $data['id_pengaduan']; ?>" name="id_pengaduan" hidden>
+                                    <div class="mb-3">
+                                      <h5 class="text-center text-danger">Yakin menghapus data <?php echo $data['judul'] ?></h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="nutton" class="btn btn-danger m1">Batal</button>
+                                      <button type="submit" class="btn btn-secondary m1" name="bdelete">Hapus Pengaduan</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- end modal hapus -->
+                        <!-- modal ubah -->
+                        <div class="modal fade modal-lg" id="modalUpdate<?php echo $num ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Ubah Pengaduan</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="card-body">
+                                  <form action="../../Controller/Mahasiswa/PMahasiswaController.php" method="post">
+                                    <input type="hidden" name="id_pengaduan" id="id_pengaduan" value="<?php echo $data['id_pengaduan']; ?>">
+                                    <div class="mb-3">
+                                      <label for="judul" class="form-label">Judul</label>
+                                      <input type="text" class="form-control" id="judul" aria-describedby="judul" name="judul" value="<?php echo $data['judul']; ?>">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="isi_pengaduan" class="form-label">Isi Pengaduan</label>
+                                      <textarea name="isi_pengaduan" id="isi_pengaduan" cols="30" rows="10" class="form-control"><?php echo $data['isi_pengaduan'] ?></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="tanggal_pengaduan" class="form-label">Tanggal Pengaduan</label>
+                                      <input type="date" class="form-control" id="tanggal_pengaduan" name="tanggal_pengaduan" value="<?php echo $data['tanggal_pengaduan']; ?>">
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-danger m1" data-bs-dismiss="modal">Keluar</button>
+                                      <button type="submit" class="btn btn-success m1" name="bupdate">Simpan</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       <?php } ?>
                     </table>
                   </div>
@@ -187,12 +249,12 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                 <input class="form-control" type="text" name="judul" id="judul" value="">
               </div>
               <div class="mb-3">
-                <label for="isi" class="form-label">Isi</label>
-                <textarea class="form-control" name="isi" id="isi" cols="30" rows="10"></textarea>
+                <label for="isi_pengaduan" class="form-label">Isi</label>
+                <textarea class="form-control" name="isi_pengaduan" id="isi_pengaduan" cols="30" rows="10"></textarea>
               </div>
               <div class="mb-3">
                 <label for="tgl_pengaduan" class="form-label">Tanggal Pengaduan</label>
-                <input type="date" class="form-control" id="tgl_pengaduan" name="tgl_pengaduan">
+                <input type="date" class="form-control" id="tgl_pengaduan" name="tgl_pengaduan" required>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger m1" data-bs-dismiss="modal">Keluar</button>

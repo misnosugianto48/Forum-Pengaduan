@@ -30,9 +30,16 @@ function checkLogin($conn, $username, $password, $userType)
   $row = sqlsrv_fetch_array($stmt);
 
   if ($row) {
-    $_SESSION['id_user'] = $row["id_$userType"];
+    // $_SESSION['id_user'] = $row["id_$userType"];
     $_SESSION['username'] = $row['username'];
     $_SESSION['level_user'] = $row['level_user'];
+
+    if ($userType == 'Mahasiswa') {
+      // Capture id_mahasiswa for Mahasiswa
+      $_SESSION['id_mahasiswa'] = $row['id_mahasiswa'];
+    } elseif ($userType == 'Petugas') {
+      $_SESSION['id_petugas'] = $row['id_petugas'];
+    }
 
     return true;
   } else {
@@ -40,7 +47,6 @@ function checkLogin($conn, $username, $password, $userType)
   }
 }
 
-// Proses login
 // Proses login
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   include "./Model/db.php";

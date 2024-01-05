@@ -41,6 +41,7 @@ function checkLogin($conn, $username, $password, $userType)
 }
 
 // Proses login
+// Proses login
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   include "./Model/db.php";
   $username = $_POST['username'];
@@ -52,28 +53,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($_SESSION['level_user'] == 'Admin') {
       header("Location: ./View/Index.php");
     } elseif ($_SESSION['level_user'] == 'Petugas') {
-      header("Location: petugas_dashboard.php");
+      header("Location: ./View/Petugas/Index-Petugas.php");
     } elseif ($_SESSION['level_user'] == 'Mahasiswa') {
       header("Location: ./View/Mahasiswa/Index-Mahasiswa.php");
     } else {
       // Level tidak valid, sesuaikan dengan kebutuhan Anda
       echo "<script>
-                alert('Level tidak valid');
-                window.location = 'Login.php';
-                </script>";
+                  alert('Level tidak valid');
+                  window.location = 'Login.php';
+                  </script>";
     }
     exit();
   } else {
     echo "<script>
-        alert('Periksa username, password, dan jenis pengguna');
-        window.location = 'Login.php';
-        </script>";
+          alert('Periksa username, password, dan jenis pengguna');
+          window.location = 'Login.php';
+          </script>";
   }
 }
+
+// Setelah proses login berhasil
+if (isset($_SESSION['id_user'])) {
+  // Redirect ke halaman sesuai dengan level jika sudah login
+  if ($_SESSION['level_user'] == 'Admin') {
+    header("Location: ./View/Index.php");
+  } elseif ($_SESSION['level_user'] == 'Petugas') {
+    header("Location: ./View/Petugas/Index-Petugas.php");
+  } elseif ($_SESSION['level_user'] == 'Mahasiswa') {
+    header("Location: ./View/Mahasiswa/Index-Mahasiswa.php");
+  }
+  exit();
+}
+
 ?>
-
-
-
 
 <!doctype html>
 <html lang="en">

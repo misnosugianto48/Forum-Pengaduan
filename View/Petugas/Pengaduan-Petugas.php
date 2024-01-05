@@ -42,7 +42,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
               <span class="hide-menu">Home</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Index-Mahasiswa.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Index-Petugas.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -54,7 +54,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
               <span class="hide-menu">CONTENT</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Pengaduan-Mahasiswa.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Pengaduan-Petugas.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-alert-circle"></i>
                 </span>
@@ -62,7 +62,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Tanggapan-Mahasiswa.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Tanggapan-Petugas.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-bell"></i>
                 </span>
@@ -121,13 +121,14 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                   </div>
                   <div class="card-body">
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-outline-primary m-1 mb-2" data-bs-toggle="modal" data-bs-target="#modalAdd">
+                    <!-- <button type="button" class="btn btn-outline-primary m-1 mb-2" data-bs-toggle="modal" data-bs-target="#modalAdd">
                       <i class="ti ti-plus fs-6"></i>
-                    </button>
+                    </button> -->
                     <table class="table table-bordered table-striped table-hover">
                       <thead>
                         <tr>
                           <th>NO</th>
+                          <th>MAHASISWA</th>
                           <th>JUDUL</th>
                           <th>ISI</th>
                           <th>DIBUAT</th>
@@ -139,7 +140,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                       $sql = "SELECT pengaduan.*, mahasiswa.username 
                       FROM pengaduan 
                       LEFT JOIN mahasiswa ON pengaduan.id_mahasiswa = mahasiswa.id_mahasiswa 
-                      WHERE pengaduan.id_mahasiswa = ? 
+                      WHERE status_pengaduan = 'On Progres'
                       ORDER BY id_pengaduan DESC";
 
                       // Eksekusi pernyataan SQL dengan parameter ID mahasiswa login
@@ -150,13 +151,13 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                       ?>
                         <tr>
                           <td><?php echo $num++; ?></td>
+                          <td><?php echo $data['username']; ?></td>
                           <td><?php echo $data['judul']; ?></td>
                           <td><?php echo $data['isi_pengaduan']; ?></td>
                           <td><?php echo $data['tanggal_pengaduan']; ?></td>
                           <td><?php echo $data['status_pengaduan']; ?></td>
                           <td>
-                            <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-pencil fs-6"></i></a>
-                            <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="ti ti-trash fs-6"></i></a>
+                            <a href="#" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-bell-ringing fs-6"></i></a>
                           </td>
                         </tr>
                       <?php } ?>

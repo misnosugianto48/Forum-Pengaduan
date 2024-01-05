@@ -5,7 +5,7 @@ if (!isset($_SESSION['username'])) {
   header("location: ../../Login.php");
   exit();
 }
-$id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi yang Anda gunakan
+$id_petugas_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi yang Anda gunakan
 
 ?>
 
@@ -42,7 +42,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
               <span class="hide-menu">Home</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Index-Mahasiswa.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Index-Petugas.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -54,7 +54,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
               <span class="hide-menu">CONTENT</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Pengaduan-Mahasiswa.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Pengaduan-Petugas.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-alert-circle"></i>
                 </span>
@@ -62,7 +62,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Tanggapan-Mahasiswa.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Tanggapan-Petugas.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-bell"></i>
                 </span>
@@ -96,11 +96,11 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="./Profile.php" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3"><?php print_r($_SESSION['username']); ?></p>
                     </a>
-                    <a href="controller/authController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
+                    <a href="../../Controller/LogoutController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -129,21 +129,22 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                         <tr>
                           <th>NO</th>
                           <th>JUDUL</th>
+                          <th>PETUGAS</th>
                           <th>ISI</th>
-                          <th>DIBUAT</th>
-                          <th>STATUS</th>
+                          <th>DITANGGAPI</th>
                           <th>AKSI</th>
                         </tr>
                       </thead>
                       <?php
-                      $sql = "SELECT pengaduan.*, mahasiswa.username 
-                      FROM pengaduan 
-                      LEFT JOIN mahasiswa ON pengaduan.id_mahasiswa = mahasiswa.id_mahasiswa 
-                      WHERE pengaduan.id_mahasiswa = ? 
-                      ORDER BY id_pengaduan DESC";
+                      $sql = "SELECT tanggapan.*, pengaduan.judul, petugas.username 
+                      FROM tanggapan 
+                      LEFT JOIN pengaduan ON tanggapan.id_pengaduan = pengaduan.id_pengaduan
+                      LEFT JOIN petugas ON tanggapan.id_petugas = petugas.id_petugas
+                      WHERE tanggapan.id_petugas = ?
+                      ORDER BY tanggapan.id_tanggapan DESC";
 
                       // Eksekusi pernyataan SQL dengan parameter ID mahasiswa login
-                      $params = array($id_mahasiswa_login);
+                      $params = array($id_petugas_login);
                       $stmt = sqlsrv_query($conn, $sql, $params);
                       $num = 1;
                       while ($data = sqlsrv_fetch_array($stmt)) {
@@ -151,9 +152,9 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                         <tr>
                           <td><?php echo $num++; ?></td>
                           <td><?php echo $data['judul']; ?></td>
-                          <td><?php echo $data['isi_pengaduan']; ?></td>
-                          <td><?php echo $data['tanggal_pengaduan']; ?></td>
-                          <td><?php echo $data['status_pengaduan']; ?></td>
+                          <td><?php echo $data['username']; ?></td>
+                          <td><?php echo $data['isi_tanggapan']; ?></td>
+                          <td><?php echo $data['tanggal_tanggapan']; ?></td>
                           <td>
                             <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-pencil fs-6"></i></a>
                             <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="ti ti-trash fs-6"></i></a>
@@ -176,23 +177,43 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Tambah Pengaduan</h1>
+          <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Tambah User</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="card-body">
-            <form action="../../Controller/Mahasiswa/PMahasiswaController.php" method="post">
+            <form action="controller/userController.php" method="post">
               <div class="mb-3">
-                <label for="judul" class="form-label">Judul</label>
-                <input class="form-control" type="text" name="judul" id="judul" value="">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" aria-describedby="username" name="username">
               </div>
               <div class="mb-3">
-                <label for="isi" class="form-label">Isi</label>
-                <textarea class="form-control" name="isi" id="isi" cols="30" rows="10"></textarea>
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password">
               </div>
               <div class="mb-3">
-                <label for="tgl_pengaduan" class="form-label">Tanggal Pengaduan</label>
-                <input type="date" class="form-control" id="tgl_pengaduan" name="tgl_pengaduan">
+                <label for="nama" class="form-label">Nama</label>
+                <input type="text" class="form-control" id="nama" name="nama">
+              </div>
+              <div class="mb-3">
+                <label for="jenisKelamin" class="form-label">Jenis kelamin</label>
+                <Select id="jenisKelamin" class="form-select" name="jenisKelamin">
+                  <option value="" selected>Pilih</option>
+                  <option value="Laki-Laki">Laki-Laki</option>
+                  <option value="Perempuan">Perempuan</option>
+                </Select>
+              </div>
+              <div class="mb-3">
+                <label for="notelepon" class="form-label">No Telepon</label>
+                <input type="text" class="form-control" id="notelepon" name="notelepon">
+              </div>
+              <div class="mb-3">
+                <label for="level" class="form-label">Level</label>
+                <Select id="level" class="form-select" name="level">
+                  <option value="" selected>Pilih</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Member">Member</option>
+                </Select>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger m1" data-bs-dismiss="modal">Keluar</button>

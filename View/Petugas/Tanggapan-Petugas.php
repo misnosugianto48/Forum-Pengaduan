@@ -1,5 +1,12 @@
 <?php
-include "../Model/db.php";
+session_start();
+include "../../Model/db.php";
+if (!isset($_SESSION['username'])) {
+  header("location: ../../Login.php");
+  exit();
+}
+$id_petugas_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi yang Anda gunakan
+
 ?>
 
 <!doctype html>
@@ -9,7 +16,7 @@ include "../Model/db.php";
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pengaduan</title>
-  <link rel="stylesheet" href="../assets/css/styles.min.css" />
+  <link rel="stylesheet" href="../../assets/css/styles.min.css" />
 </head>
 
 <body>
@@ -35,7 +42,7 @@ include "../Model/db.php";
               <span class="hide-menu">Home</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Index.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Index-Petugas.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -47,15 +54,7 @@ include "../Model/db.php";
               <span class="hide-menu">CONTENT</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./User.php" aria-expanded="false">
-                <span>
-                  <i class="ti ti-user"></i>
-                </span>
-                <span class="hide-menu">User</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./Pengaduan.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Pengaduan-Petugas.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-alert-circle"></i>
                 </span>
@@ -63,7 +62,7 @@ include "../Model/db.php";
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Tanggapan.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Tanggapan-Petugas.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-bell"></i>
                 </span>
@@ -93,15 +92,15 @@ include "../Model/db.php";
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="../assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                  <img src="../../assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3"></p>
+                      <p class="mb-0 fs-3"><?php print_r($_SESSION['username']); ?></p>
                     </a>
-                    <a href="controller/authController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
+                    <a href="../../Controller/LogoutController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -137,14 +136,18 @@ include "../Model/db.php";
                         </tr>
                       </thead>
                       <?php
-                      $sql = "SELECT tanggapan.*, petugas.username, pengaduan.judul
-                      FROM tanggapan
-                      LEFT JOIN petugas ON tanggapan.id_petugas = petugas.id_petugas
+                      $sql = "SELECT tanggapan.*, pengaduan.judul, petugas.username 
+                      FROM tanggapan 
                       LEFT JOIN pengaduan ON tanggapan.id_pengaduan = pengaduan.id_pengaduan
-                      ORDER BY id_tanggapan DESC";
-                      $query = sqlsrv_query($conn, $sql);
+                      LEFT JOIN petugas ON tanggapan.id_petugas = petugas.id_petugas
+                      WHERE tanggapan.id_petugas = ?
+                      ORDER BY tanggapan.id_tanggapan DESC";
+
+                      // Eksekusi pernyataan SQL dengan parameter ID mahasiswa login
+                      $params = array($id_petugas_login);
+                      $stmt = sqlsrv_query($conn, $sql, $params);
                       $num = 1;
-                      while ($data = sqlsrv_fetch_array($query)) {
+                      while ($data = sqlsrv_fetch_array($stmt)) {
                       ?>
                         <tr>
                           <td><?php echo $num++; ?></td>
@@ -222,13 +225,13 @@ include "../Model/db.php";
       </div>
     </div>
   </div>
-  <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
-  <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/js/sidebarmenu.js"></script>
-  <script src="../assets/js/app.min.js"></script>
-  <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-  <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
-  <script src="../assets/js/dashboard.js"></script>
+  <script src="../../assets/libs/jquery/dist/jquery.min.js"></script>
+  <script src="../../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/js/sidebarmenu.js"></script>
+  <script src="../../assets/js/app.min.js"></script>
+  <script src="../../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
+  <script src="../../assets/libs/simplebar/dist/simplebar.js"></script>
+  <script src="../../assets/js/dashboard.js"></script>
 </body>
 
 </html>

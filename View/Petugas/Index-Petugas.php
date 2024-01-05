@@ -5,9 +5,10 @@ if (!isset($_SESSION['username'])) {
   header("location: ../../Login.php");
   exit();
 }
-$id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi yang Anda gunakan
+$id_petugas_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi yang Anda gunakan
 
 ?>
+
 <!doctype html>
 <html lang="en">
 
@@ -42,7 +43,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
               <span class="hide-menu">Home</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Index-Mahasiswa.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Index-Petugas.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -54,7 +55,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
               <span class="hide-menu">CONTENT</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Pengaduan-Mahasiswa.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Pengaduan-Petugas.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-alert-circle"></i>
                 </span>
@@ -62,7 +63,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./Tanggapan-Mahasiswa.php" aria-expanded="false">
+              <a class="sidebar-link" href="./Tanggapan-Petugas.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-bell"></i>
                 </span>

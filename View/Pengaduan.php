@@ -1,5 +1,12 @@
 <?php
+session_start();
 include "../Model/db.php";
+if (!isset($_SESSION['username'])) {
+  header("location: ../../Login.php");
+  exit();
+}
+$id_admin = $_SESSION['id_admin']; // Sesuaikan dengan variabel sesi yang Anda gunakan
+
 ?>
 
 <!doctype html>
@@ -99,9 +106,9 @@ include "../Model/db.php";
                   <div class="message-body">
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3"></p>
+                      <p class="mb-0 fs-3"><?php print_r($_SESSION['username']); ?></p>
                     </a>
-                    <a href="controller/authController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
+                    <a href="../Controller/LogoutController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -121,10 +128,6 @@ include "../Model/db.php";
                   <div class="card-header">
                   </div>
                   <div class="card-body">
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-outline-primary m-1 mb-2" data-bs-toggle="modal" data-bs-target="#modalAdd">
-                      <i class="ti ti-plus fs-6"></i>
-                    </button>
                     <table class="table table-bordered table-striped table-hover">
                       <thead>
                         <tr>
@@ -167,60 +170,6 @@ include "../Model/db.php";
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Add-->
-  <div class="modal fade modal-lg" id="modalAdd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Tambah User</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="card-body">
-            <form action="controller/userController.php" method="post">
-              <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" aria-describedby="username" name="username">
-              </div>
-              <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password">
-              </div>
-              <div class="mb-3">
-                <label for="nama" class="form-label">Nama</label>
-                <input type="text" class="form-control" id="nama" name="nama">
-              </div>
-              <div class="mb-3">
-                <label for="jenisKelamin" class="form-label">Jenis kelamin</label>
-                <Select id="jenisKelamin" class="form-select" name="jenisKelamin">
-                  <option value="" selected>Pilih</option>
-                  <option value="Laki-Laki">Laki-Laki</option>
-                  <option value="Perempuan">Perempuan</option>
-                </Select>
-              </div>
-              <div class="mb-3">
-                <label for="notelepon" class="form-label">No Telepon</label>
-                <input type="text" class="form-control" id="notelepon" name="notelepon">
-              </div>
-              <div class="mb-3">
-                <label for="level" class="form-label">Level</label>
-                <Select id="level" class="form-select" name="level">
-                  <option value="" selected>Pilih</option>
-                  <option value="Admin">Admin</option>
-                  <option value="Member">Member</option>
-                </Select>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-danger m1" data-bs-dismiss="modal">Keluar</button>
-                <button type="submit" class="btn btn-success m1" name="bsimpan">Simpan</button>
-              </div>
-            </form>
           </div>
         </div>
       </div>

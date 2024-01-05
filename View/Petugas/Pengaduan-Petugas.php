@@ -5,7 +5,7 @@ if (!isset($_SESSION['username'])) {
   header("location: ../../Login.php");
   exit();
 }
-$id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi yang Anda gunakan
+$id_petugas = $_SESSION['id_petugas']; // Sesuaikan dengan variabel sesi yang Anda gunakan
 
 ?>
 
@@ -98,7 +98,7 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                   <div class="message-body">
                     <a href="./Profile.php" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3"><?php print_r($_SESSION['username']); ?></p>
+                      <p class="mb-0 fs-3"><?php print_r($_SESSION['username']); ?> - ID <?php print_r($_SESSION['id_petugas']); ?></p>
                     </a>
                     <a href="../../Controller/LogoutController.php" class="btn btn-outline-danger mx-3 mt-2 d-block">Logout</a>
                   </div>
@@ -137,10 +137,10 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                         </tr>
                       </thead>
                       <?php
-                      $sql = "SELECT pengaduan.*, mahasiswa.username 
+                      $sql = "SELECT pengaduan.*, mahasiswa.nama
                       FROM pengaduan 
-                      LEFT JOIN mahasiswa ON pengaduan.id_mahasiswa = mahasiswa.id_mahasiswa 
-                      WHERE status_pengaduan = 'On Progres'
+                      LEFT JOIN mahasiswa ON pengaduan.id_mahasiswa = mahasiswa.id_mahasiswa
+                      WHERE status_pengaduan = 'On Progress'
                       ORDER BY id_pengaduan DESC";
 
                       // Eksekusi pernyataan SQL dengan parameter ID mahasiswa login
@@ -151,15 +151,57 @@ $id_mahasiswa_login = $_SESSION['id_user']; // Sesuaikan dengan variabel sesi ya
                       ?>
                         <tr>
                           <td><?php echo $num++; ?></td>
-                          <td><?php echo $data['username']; ?></td>
+                          <td><?php echo $data['nama']; ?></td>
                           <td><?php echo $data['judul']; ?></td>
                           <td><?php echo $data['isi_pengaduan']; ?></td>
                           <td><?php echo $data['tanggal_pengaduan']; ?></td>
                           <td><?php echo $data['status_pengaduan']; ?></td>
                           <td>
-                            <a href="#" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate"><i class="ti ti-bell-ringing fs-6"></i></a>
+                            <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalTanggapi<?php echo $num ?>"><i class="ti ti-bell-ringing fs-6"></i></a>
                           </td>
                         </tr>
+                        <!-- modal ubah -->
+                        <div class="modal fade modal-lg" id="modalTanggapi<?php echo $num ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-6 text-centered" id="staticBackdropLabel">Tanggapi</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="card-body">
+                                  <form action="../../Controller/Petugas/PengaduanController.php" method="post">
+                                    <input type="hidden" name="id_pengaduan" id="id_pengaduan" value="<?php echo $data['id_pengaduan']; ?>">
+                                    <div class="mb-3">
+                                      <label for="judul" class="form-label">Judul</label>
+                                      <input type="text" class="form-control" id="judul" aria-describedby="judul" name="judul" value="<?php echo $data['judul']; ?>" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="isi_pengaduan" class="form-label">Isi Pengaduan</label>
+                                      <textarea name="isi_pengaduan" id="isi_pengaduan" cols="30" rows="10" class="form-control" readonly><?php echo $data['isi_pengaduan'] ?></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="tanggal_pengaduan" class="form-label">Tanggal Pengaduan</label>
+                                      <input type="date" class="form-control" id="tanggal_pengaduan" name="tanggal_pengaduan" value="<?php echo $data['tanggal_pengaduan']; ?>" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="isi_tanggapan" class="form-label">Tanggapi</label>
+                                      <textarea name="isi_tanggapan" id="isi_tanggapan" cols="30" rows="10" class="form-control"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="tanggal_tanggapan" class="form-label">Tanggal Pengaduan</label>
+                                      <input type="date" class="form-control" id="tanggal_tanggapan" name="tanggal_tanggapan" value="<?php echo $data['tanggal_tanggapan']; ?>">
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-danger m1" data-bs-dismiss="modal">Keluar</button>
+                                      <button type="submit" class="btn btn-success m1" name="bTanggapi">Simpan</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       <?php } ?>
                     </table>
                   </div>

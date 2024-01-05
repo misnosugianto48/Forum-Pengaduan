@@ -120,6 +120,13 @@ SELECT pengaduan.*, mahasiswa.username
 
 SELECT COUNT(*) AS total_menanggapi  FROM tanggapan WHERE id_petugas = 2
 
-SELECT COUNT(*) AS total_ditanggapi , pengaduan.id_mahasiswa FROM tanggapan 
+SELECT COUNT(*) AS total_ditanggapi
+FROM tanggapan
 INNER JOIN pengaduan ON tanggapan.id_pengaduan = pengaduan.id_pengaduan
- WHERE id_mahasiswa = 3
+WHERE pengaduan.id_mahasiswa = 3;
+
+SELECT tanggapan.*, pengaduan.judul, pengaduan.isi_pengaduan, pengaduan.tanggal_pengaduan,
+        pengaduan.status_pengaduan FROM tanggapan
+        INNER JOIN pengaduan ON tanggapan.id_pengaduan = pengaduan.id_pengaduan
+        WHERE pengaduan.status_pengaduan = 'Done'
+        ORDER BY tanggapan.tanggal_tanggapan DESC;

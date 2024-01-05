@@ -37,6 +37,8 @@ function checkLogin($conn, $username, $password, $userType)
     if ($userType == 'Mahasiswa') {
       // Capture id_mahasiswa for Mahasiswa
       $_SESSION['id_mahasiswa'] = $row['id_mahasiswa'];
+    } elseif ($userType == 'Petugas') {
+      $_SESSION['id_petugas'] = $row['id_petugas'];
     }
 
     return true;

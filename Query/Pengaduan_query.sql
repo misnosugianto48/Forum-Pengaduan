@@ -107,3 +107,19 @@ FROM pengaduan
 LEFT JOIN mahasiswa ON pengaduan.id_mahasiswa = mahasiswa.id_mahasiswa
 INNER JOIN petugas ON pengaduan.id_petugas = petugas.id_petugas 
 ORDER BY id_pengaduan DESC;
+
+SELECT pengaduan.*, mahasiswa.username FROM pengaduan RIGHT JOIN mahasiswa ON pengaduan.id_mahasiswa = mahasiswa.id_mahasiswa ORDER BY id_pengaduan DESC
+
+select DISTINCT email from mahasiswa
+
+SELECT pengaduan.*, mahasiswa.username 
+                      FROM pengaduan 
+                      LEFT JOIN mahasiswa ON pengaduan.id_mahasiswa = mahasiswa.id_mahasiswa 
+                      WHERE status_pengaduan = 'On Progres'
+                      ORDER BY id_pengaduan DESC;
+
+SELECT COUNT(*) AS total_menanggapi  FROM tanggapan WHERE id_petugas = 2
+
+SELECT COUNT(*) AS total_ditanggapi , pengaduan.id_mahasiswa FROM tanggapan 
+INNER JOIN pengaduan ON tanggapan.id_pengaduan = pengaduan.id_pengaduan
+ WHERE id_mahasiswa = 3

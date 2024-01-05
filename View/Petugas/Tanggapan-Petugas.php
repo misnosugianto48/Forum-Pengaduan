@@ -153,7 +153,6 @@ $id_petugas_login = $_SESSION['id_petugas']; // Sesuaikan dengan variabel sesi y
                           <td><?php echo $data['tanggal_tanggapan']; ?></td>
                           <td>
                             <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalUpdate<?php echo $num; ?>"><i class="ti ti-pencil fs-6"></i></a>
-                            <a href="#" class="btn btn-outline-danger m-1" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="ti ti-trash fs-6"></i></a>
                           </td>
                         </tr>
 

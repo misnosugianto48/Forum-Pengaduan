@@ -120,10 +120,6 @@ $id_petugas = $_SESSION['id_petugas']; // Sesuaikan dengan variabel sesi yang An
                   <div class="card-header">
                   </div>
                   <div class="card-body">
-                    <!-- Button trigger modal -->
-                    <!-- <button type="button" class="btn btn-outline-primary m-1 mb-2" data-bs-toggle="modal" data-bs-target="#modalAdd">
-                      <i class="ti ti-plus fs-6"></i>
-                    </button> -->
                     <table class="table table-bordered table-striped table-hover">
                       <thead>
                         <tr>
@@ -155,9 +151,9 @@ $id_petugas = $_SESSION['id_petugas']; // Sesuaikan dengan variabel sesi yang An
                           <td><?php echo $data['judul']; ?></td>
                           <td><?php echo $data['isi_pengaduan']; ?></td>
                           <td><?php echo $data['tanggal_pengaduan']; ?></td>
-                          <td><?php echo $data['status_pengaduan']; ?></td>
+                          <td class="text-warning"><?php echo $data['status_pengaduan']; ?></td>
                           <td>
-                            <a href="#" class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#modalTanggapi<?php echo $num ?>"><i class="ti ti-bell-ringing fs-6"></i></a>
+                            <a href="#" class="btn btn-outline-success m-1" data-bs-toggle="modal" data-bs-target="#modalTanggapi<?php echo $num ?>"><i class="ti ti-bell-ringing fs-6"></i></a>
                           </td>
                         </tr>
                         <!-- modal ubah -->
